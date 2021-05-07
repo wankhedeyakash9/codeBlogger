@@ -16,7 +16,7 @@ const knex = require("knex")({
 knex
   .raw("SELECT 1 + 1 AS solution")
   .then((results) => {
-    // console.log("The solution is: ", results[0][0].solution);
+    console.log("The solution is: ", results[0][0].solution);
     defaultLogger.info("MySql Connected using knex!...");
     defaultLogger.info(
       `Database: ${process.env.DATABASE_NAME || "ecomtrails_test"}`
