@@ -1,5 +1,6 @@
 module.exports = function (app) {
   app.use(require("../routes"));
+  app.use("/login", require("../routes/login"));
 
   //Some error
   app.use((req, res, next) => {

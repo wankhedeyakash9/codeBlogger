@@ -6,7 +6,7 @@ const winston = require("winston");
 const winstonConfig = require("../config/winston-config");
 
 let defaultLogger = winstonConfig.defaultLogger;
-const MODULE = "companyDetails-model";
+const MODULE = "common-model";
 
 // Add another logger with the category specific to this module
 winston.loggers.add(MODULE, winstonConfig.createLoggerConfig(MODULE));
@@ -30,20 +30,13 @@ module.exports = {
    *
    * @author @aakash
    */
-  select: async (selection, tableName, where, whereNot = {}) => {
+  select: async (selection, tableName, where) => {
     defaultLogger.info("Inmodels/user");
     moduleLogger.info("select()");
     moduleLogger.debug(
-      `select(${selection}, ${tableName} ,${JSON.stringify(
-        where
-      )},${JSON.stringify(whereNot)})`
+      `select(${selection}, ${tableName} ,${JSON.stringify(where)})`
     );
-    return await knex
-      .select(selection.split(","))
-      .from(tableName)
-      .where(where)
-      .whereNot(whereNot)
-      .first();
+    return await knex.select(selection).from(tableName).where(where);
   },
 
   /**

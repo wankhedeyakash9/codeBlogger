@@ -1,7 +1,7 @@
 const winston = require("winston");
 
 // The default Category
-const DEFAULT_CATEGORY = "ecom_api_node";
+const DEFAULT_CATEGORY = "codeBlogger";
 
 /**
  * Creates a specific type of logger config
@@ -17,6 +17,12 @@ const DEFAULT_CATEGORY = "ecom_api_node";
 
 function createLoggerConfig(category) {
   return {
+    levels: {
+      error: 0,
+      debug: 1,
+      info: 2,
+    },
+    exitOnError: false,
     transports: [
       new winston.transports.Console({
         level: process.env.LOGGER_LEVEL,
@@ -32,31 +38,40 @@ function createLoggerConfig(category) {
       }),
       new winston.transports.File({
         level: "info",
-        filename: "logs/Info.log",
+        filename: "logs/info.log",
         json: true,
         format: winston.format.combine(
           winston.format.timestamp(),
+          winston.format.metadata({
+            fillExcept: ["message", "level", "timestamp", "label", "password"],
+          }),
           winston.format.json()
         ),
       }),
       new winston.transports.File({
         level: "error",
-        filename: "logs/Error.log",
+        filename: "logs/error.log",
         json: true,
         format: winston.format.combine(
           winston.format.timestamp(),
+          winston.format.metadata({
+            fillExcept: ["message", "level", "timestamp", "label"],
+          }),
           winston.format.json()
         ),
       }),
-      new winston.transports.File({
-        level: "debug",
-        filename: "logs/Debug.log",
-        json: true,
-        format: winston.format.combine(
-          winston.format.timestamp(),
-          winston.format.json()
-        ),
-      }),
+      // new winston.transports.File({
+      //   level: "debug",
+      //   filename: "logs/Debug.log",
+      //   json: true,
+      //   format: winston.format.combine(
+      //     winston.format.metadata({
+      //       fillExcept: ["message", "level", "timestamp", "label"],
+      //     }),
+      //     winston.format.json(),
+      //     winston.format.timestamp()
+      //   ),
+      // }),
     ],
   };
 }

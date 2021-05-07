@@ -25,8 +25,8 @@ app.use(cors());
 console.log(`CORS enabled`);
 
 //Enabling morgan
-const morgan = require("morgan");
-app.use(morgan("dev"));
+const morgan = require("./loaders/morgan");
+morgan(app);
 
 // eslint-disable-next-line no-console
 console.log(`MORGAN enabled`);
@@ -44,8 +44,16 @@ swaggerDoc(app);
 //check if doesn't already exists
 global.include || (global.include = require("app-root-path").require);
 
-//Loading routes
+//logger
+const logger = require("./helpers/logger");
+
+//info log
+app.use(logger.info);
+
 require("./loaders/routes")(app);
+
+//error log
+app.use(logger.error);
 
 const PORT = process.env.PORT || 8081;
 
