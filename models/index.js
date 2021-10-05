@@ -117,4 +117,43 @@ module.exports = {
     );
     return await knex(tableName).where(where).whereNot(whereNot).update(data);
   },
+  insertData: (tableName, data) => {
+    try {
+      moduleLogger.debug(`insertData()`);
+      return knex(tableName)
+        .insert(data)
+        .then((log) => {
+          return log[0]; // returns the insert id
+        });
+    } catch (error) {
+      defaultLogger.info(`Error in ${MODULE}.insertData()`);
+      moduleLogger.error(error);
+      moduleLogger.error(error.stack);
+      throw error;
+    }
+  },
+  selectData: (selection = [""], fromTable = "", where = {}) => {
+    try {
+      return knex(fromTable)
+        .where(where)
+        .select(selection)
+        .join("person", "posts.person_id", "person.person_id");
+    } catch (error) {
+      defaultLogger.info(`Error in ${MODULE}.selectAll()`);
+      moduleLogger.error(error);
+      throw error;
+    }
+  },
+  selectPost: (selection = [""], fromTable = "", where = {}) => {
+    try {
+      return knex(fromTable)
+        .where(where)
+        .select(selection)
+        .join("posts", "shared.post_id", "posts.id");
+    } catch (error) {
+      defaultLogger.info(`Error in ${MODULE}.selectAll()`);
+      moduleLogger.error(error);
+      throw error;
+    }
+  },
 };
